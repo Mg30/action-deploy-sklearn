@@ -5,3 +5,5 @@ cd app/backend/api
 sls deploy > sls.txt
 cd $GITHUB_WORKSPACE
 python3 app/endpoint.py app/backend/api/sls.txt
+endpoint=$(cat app/backend/api/sls.txt)
+echo "::set-output name=endpoint::$endpoint"

@@ -1,16 +1,30 @@
-name: 'lambda-deploy'
-description: 'allow deployement node js to lambda'
+name: "sklearn fastapi aws lambda"
+description: "deploy a fastapi REST api to AWS lambda suing serverless framework"
 inputs:
-  bucket-name:  
-    description: 'the s3 bucket to upload dependencies'
+  service_name:
+    description: The name of the api
     required: true
-  function-name:
-    description: 'the lambda function name to deploy code to'
+  stage:
+    description: The stage to deploy the API to
     required: true
-
+  aws_default_region:
+    description: The aws region to deploy the API to
+    required: true
+  aws_s3_bucket:
+    description: The aws s3 bucket where the sklearn model is stored
+    required: true
+  model_key:
+    description: The key in the s3 bucket to retrieve the sklearn model
+    required: true
+  model_version:
+    description: The version id of the ml model artifact stored in s3 bucket
+    required: true
+outputs:
+  time: # id of output
+    description: "The time we greeted you"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   args:
     - ${{inputs.files}}
     - ${{ inputs.bucket_name }}
