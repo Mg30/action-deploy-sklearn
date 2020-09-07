@@ -20,8 +20,8 @@ inputs:
     description: The version id of the ml model artifact stored in s3 bucket
     required: true
 outputs:
-  time: # id of output
-    description: "The time we greeted you"
+  endpoint: # id of output
+    description: "The http endpoint where the model is deployed"
 runs:
   using: "docker"
   image: "Dockerfile"
