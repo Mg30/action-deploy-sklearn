@@ -20,12 +20,15 @@ inputs:
     description: The version id of the ml model artifact stored in s3 bucket
     required: true
 outputs:
-  endpoint: # id of output
+  endpoint:
     description: "The http endpoint where the model is deployed"
 runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - ${{inputs.files}}
-    - ${{ inputs.bucket_name }}
-    - ${{ inputs.function_name }}
+    - ${{inputs.service_name}}
+    - ${{ inputs.stage }}
+    - ${{ inputs.aws_default_region }}
+    - ${{ inputs.aws_s3_bucket }}
+    - ${{ inputs.model_key }}
+    - ${{ inputs.model_version }}
