@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: ${env:SERVICE_NAME}
+service: ${env:INPUT_SERVICE_NAME}
 
 plugins:
   - serverless-python-requirements
@@ -24,8 +24,8 @@ custom:
     noDeploy:
       - uvicorn
 
-stage: ${env:STAGE}
-region: ${env:AWS_DEFAULT_REGION}
+stage: ${env:INPUT_STAGE}
+region: ${env:INPUT_AWS_DEFAULT_REGION}
 
 provider:
   name: aws
@@ -34,16 +34,16 @@ provider:
     SQS_URL:
       Ref: MyQueue
     QUEUE_TABLE: ${self:custom.tableName}
-    BUCKET_NAME: ${env:AWS_S3_BUCKETNAME}
-    MODEL_KEY: ${env:MODEL_KEY}
-    MODEL_VERSION : ${env:MODEL_VERSION}
+    BUCKET_NAME: ${env:INPUT_AWS_S3_BUCKETNAME}
+    MODEL_KEY: ${env:INPUT_MODEL_KEY}
+    MODEL_VERSION : ${env:INPUT_MODEL_VERSION}
 
   iamRoleStatements:
     - Effect: "Allow"
       Action:
         - "s3:GetObject"
       Resource:
-        - "arn:aws:s3:::${env:AWS_S3_BUCKETNAME}/*"
+        - "arn:aws:s3:::${env:INPUT_AWS_S3_BUCKETNAME}/*"
     - Effect: "Allow"
       Action:
         - "sqs:ChangeMessageVisibility"

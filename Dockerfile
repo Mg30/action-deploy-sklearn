@@ -13,3 +13,5 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 
 RUN sudo npm install -g serverless  \
     sls plugin install -n serverless-python-requirements
+
+ENTRYPOINT [ "./entrypoint.sh" ]

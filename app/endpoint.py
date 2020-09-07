@@ -19,3 +19,4 @@ if __name__ == "__main__":
     file_path = sys.argv[-1]
     sls = Sls()
     endpoint = sls.find_endpoint(file_path)
+    print(f"API DEPLOYED AT: {endpoint}")
