@@ -1,0 +1,121 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: ${env:SERVICE_NAME}
+
+plugins:
+  - serverless-python-requirements
+custom:
+  tableName: "predictions"
+  pythonRequirements:
+    slim: true
+    zip: true
+    dockerizePip: non-linux
+    noDeploy:
+      - uvicorn
+
+stage: ${env:STAGE}
+region: ${env:AWS_DEFAULT_REGION}
+
+provider:
+  name: aws
+  runtime: python3.7
+  environment:
+    SQS_URL:
+      Ref: MyQueue
+    QUEUE_TABLE: ${self:custom.tableName}
+    BUCKET_NAME: ${env:AWS_S3_BUCKETNAME}
+    MODEL_KEY: ${env:MODEL_KEY}
+    MODEL_VERSION : ${env:MODEL_VERSION}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+      Resource:
+        - "arn:aws:s3:::${env:AWS_S3_BUCKETNAME}/*"
+    - Effect: "Allow"
+      Action:
+        - "sqs:ChangeMessageVisibility"
+        - "sqs:ChangeMessageVisibilityBatch"
+        - "sqs:DeleteMessage"
+        - "sqs:DeleteMessageBatch"
+        - "sqs:GetQueueAttributes"
+        - "sqs:GetQueueUrl"
+        - "sqs:ListDeadLetterSourceQueues"
+        - "sqs:ListQueueTags"
+        - "sqs:ListQueues"
+        - "sqs:PurgeQueue"
+        - "sqs:ReceiveMessage"
+        - "sqs:SendMessage"
+        - "sqs:SendMessageBatch"
+        - "sqs:SetQueueAttributes"
+        - "sqs:TagQueue"
+        - "sqs:UntagQueue"
+      Resource:
+        - { "Fn::GetAtt": ["MyQueue", "Arn"] }
+    - Effect: Allow
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource:
+        - { "Fn::GetAtt": ["DynamoDBTablePredict", "Arn"] }
+
+resources:
+  Resources:
+    MyQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "MyQueue"
+    DynamoDBTablePredict:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: prediction_id
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: prediction_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
+
+
+package:
+  individually: true
+
+functions:
+  worker:
+    handler: main.handler
+    module: worker
+    timeout: 10
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - MyQueue
+              - Arn
+  app:
+    handler: main.handler
+    module: app
+    events:
+      - http: ANY /
+      - http:
+          path: /{proxy+}
+          method: ANY
