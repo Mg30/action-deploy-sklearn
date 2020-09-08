@@ -1,8 +1,5 @@
 FROM node:lts
 
-COPY entrypoint.sh .
-COPY app/ /app/
-
 RUN apt-get update && apt-get install -y \
         curl \
         zip  \
@@ -14,4 +11,6 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
                 && ./aws/install
 
 RUN npm install -g serverless
-ENTRYPOINT [ "./entrypoint.sh" ]
+COPY entrypoint.sh .
+COPY app/ /app/
+ENTRYPOINT [ "/bin/sh","/entrypoint.sh" ]
