@@ -14,7 +14,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
                 && unzip awscliv2.zip \
                 && ./aws/install
 
-RUN npm install -g serverless
+RUN npm install -g serverless@1.72.0
 COPY entrypoint.sh .
 COPY app/ /app/
 ENTRYPOINT [ "/bin/sh","/entrypoint.sh" ]
