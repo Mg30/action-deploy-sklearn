@@ -34,7 +34,7 @@ provider:
     SQS_URL:
       Ref: PredictionQueue
     QUEUE_TABLE: ${self:custom.tableName}
-    BUCKET_NAME: ${env:AWS_S3_BUCKETNAME}
+    BUCKET_NAME: ${env:BUCKET_NAME}
     MODEL_KEY: ${env:MODEL_KEY}
     MODEL_VERSION : ${env:MODEL_VERSION}
 
@@ -43,7 +43,7 @@ provider:
       Action:
         - "s3:GetObject"
       Resource:
-        - "arn:aws:s3:::${env:AWS_S3_BUCKETNAME}/*"
+        - "arn:aws:s3:::${env:BUCKET_NAME}/*"
     - Effect: "Allow"
       Action:
         - "sqs:ChangeMessageVisibility"

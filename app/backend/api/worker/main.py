@@ -15,7 +15,7 @@ MODEL_VERSION = os.environ["MODEL_VERSION"]
 
 dynamodb = boto3.client("dynamodb")
 s3 = boto3.resource("s3")
-model = pickle.loads(s3.ObjectVersion(BUCKET_NAME,MODEL_KEY,MODEL_KEY).get()["Body"].read())
+model = pickle.loads(s3.ObjectVersion(BUCKET_NAME,MODEL_KEY,MODEL_VERSION).get()["Body"].read())
 
 
 def handler(event, context):
