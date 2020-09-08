@@ -16,7 +16,7 @@ service: ${env:SERVICE_NAME}
 plugins:
   - serverless-python-requirements
 custom:
-  tableName: "predictions"
+  tableName: "sklearnpredictions"
   pythonRequirements:
     slim: true
     zip: true
