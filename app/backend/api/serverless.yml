@@ -42,6 +42,7 @@ provider:
     - Effect: "Allow"
       Action:
         - "s3:GetObject"
+        - "s3:GetObjectVersion"
       Resource:
         - "arn:aws:s3:::${env:BUCKET_NAME}/*"
     - Effect: "Allow"
