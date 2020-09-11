@@ -4,7 +4,7 @@ export AWS_DEFAULT_REGION=$INPUT_AWS_DEFAULT_REGION
 export BUCKET_NAME=$INPUT_AWS_S3_BUCKET
 export MODEL_KEY=$INPUT_MODEL_KEY
 export MODEL_VERSION=$INPUT_MODEL_VERSION
-
+export WORKER_TIMEOUT=$INPUT_WORKER_TIMEOUT
 cp validation.py /app/backend/api/app
 cd /app/backend/api
 sls plugin install -n serverless-python-requirements

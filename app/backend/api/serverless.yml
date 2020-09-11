@@ -105,7 +105,7 @@ functions:
   worker:
     handler: main.handler
     module: worker
-    timeout: 10
+    timeout: ${env:WORKER_TIMEOUT}
     events:
       - sqs:
           arn:

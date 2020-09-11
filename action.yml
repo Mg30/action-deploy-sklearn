@@ -19,6 +19,10 @@ inputs:
   model_version:
     description: The version id of the ml model artifact stored in s3 bucket
     required: true
+  worker_timeout:
+    description: The timeout to apply to the lambda worker default = 10
+    required: false
+    default: "10"
 outputs:
   endpoint:
     description: "The http endpoint where the model is deployed"
@@ -32,3 +36,4 @@ runs:
     - ${{ inputs.aws_s3_bucket }}
     - ${{ inputs.model_key }}
     - ${{ inputs.model_version }}
+    - ${{ inputs.worker_timeout }}
